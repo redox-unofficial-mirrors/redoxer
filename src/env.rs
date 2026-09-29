@@ -194,10 +194,10 @@ pub fn command<S: AsRef<ffi::OsStr>>(program: S) -> anyhow::Result<process::Comm
     } else if is_host {
         command.env_remove("LDFLAGS");
     }
+    let rustflags_key = format!("CARGO_TARGET_{cargo_target_var}_RUSTFLAGS");
+    command.env(format!("REDOXER_RUSTFLAGS_KEY"), &rustflags_key);
     if !rustflags.is_empty() {
-        let rustflags_key = format!("CARGO_TARGET_{cargo_target_var}_RUSTFLAGS");
         command.env(&rustflags_key, rustflags);
-        command.env(format!("REDOXER_RUSTFLAGS_KEY"), &rustflags_key);
         command.env_remove("RUSTFLAGS");
     } else if is_host {
         command.env_remove("RUSTFLAGS");
